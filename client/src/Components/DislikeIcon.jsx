@@ -25,7 +25,7 @@ export default function DislikeIcon({ decreaseVote, indexElm }) {
           decreaseVote(indexElm);
         }}
       >
-        UNlike
+        Dislike
       </Button>
     </div>
   );

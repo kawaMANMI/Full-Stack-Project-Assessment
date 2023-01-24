@@ -9,6 +9,8 @@ const useStyles = makeStyles({
   },
 });
 
+
+//The compenent for delete video, but before that, window command ma
 export default function DeleteButton({ deleteVideo, indexElm }) {
   const classes = useStyles();
 

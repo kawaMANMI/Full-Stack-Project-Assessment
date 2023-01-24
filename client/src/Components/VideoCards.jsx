@@ -5,6 +5,13 @@ import "../App.css";
 import DeleteButton from "./DeleteButton";
 // import { useState } from 'react';
 
+//This compnenet the Crads of the videos including, detials of the videos and voting (Like ) options.]
+//Have not got time yest to fully staisfy the style and css. 
+//But the functionality for like and dislike, adding video, deleting video is working fine.
+
+
+
+
 const VideoCards = ({ videosData, dataChange }) => {
   const increaseVote = (index) => {
     videosData[index].rating++;

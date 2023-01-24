@@ -9,11 +9,19 @@ import AddVideo from "./Components/AddVideo";
 function App() {
 
 
-  //Make data flxible and can be changed
-  let  [videosData, setVideosData]=useState(data);
+  //Make data flexible and can be changed
+  const orderDataAccordingToVoteRate=(data)=>{
+    data.sort((a,b) => b.rating - a.rating);
+    data=[...data];
+    return data;
+  }
+  let  [videosData, setVideosData]=useState(orderDataAccordingToVoteRate(data));
 
+  
   const changeData=(data)=>{
-    setVideosData(data)
+    orderDataAccordingToVoteRate(data); //Live sorting after each change on data, resort again according to the rate
+    setVideosData(data);
+    console.log(data)
     }
   return (
     <div className="App">

@@ -2,7 +2,7 @@ import { React, useState } from "react";
 import Button from "@material-ui/core/Button";
 import { makeStyles } from "@material-ui/core/styles";
 import TextField from "@mui/material/TextField";
-// import urlExist from "url-exist";
+
 
 const useStyles = makeStyles({
   customButton: {
@@ -14,12 +14,23 @@ const useStyles = makeStyles({
 export default function AddVideo({ videosData, dataChange }) {
   const classes = useStyles();
   const [showForm, setShowForm] = useState(false);
+  const [url, setUrl] = useState("");
+
+  const handleOnChange = (e) => {
+    setUrl(e.target.value);
+  };
+
+  const validateUrl = (URL) => {
+    const regex = new RegExp(
+      "(http(s)?://)?((w){3}.)?youtu(be|.be)?(.com)?/.+"
+    );
+    return regex.test(URL);
+  };
 
   const updateData = (video) => {
     videosData.push(video);
     videosData = [...videosData];
     dataChange(videosData);
-    console.log(videosData);
   };
 
   const handleSubmit = (event) => {
@@ -31,18 +42,29 @@ export default function AddVideo({ videosData, dataChange }) {
     if (url && title) {
       //generating random id with six digits
       //We can also find max Id and add one each time
-      const arrayId = videosData.map((video) => parseInt(video.id));
-      let id = arrayId[0];
-      while (arrayId.includes(id)) {
-        id = Math.floor(100000 + Math.random() * 900000);
+      if (validateUrl(url)) {
+        const arrayId = videosData.map((video) => parseInt(video.id));
+        let id = arrayId[0];
+        while (arrayId.includes(id)) {
+          id = Math.floor(100000 + Math.random() * 900000);
+        }
+        video.id = id;
+        video.title = title;
+        video.url = url;
+        video.rating = 0;
+        const now = new Date()
+        const date = now.toLocaleDateString();
+        const time = now.toLocaleTimeString();
+        video.date=date;
+        video.time=time;
+        updateData(video);
+        alert("New Video has been added to you album");
+        setShowForm(false);
+      } else {
+        alert("The URL is not Valid");
       }
-      video.id = id;
-      video.title = title;
-      video.url = url;
-      video.rating = 0;
-      updateData(video);
-      alert("New Video has been added to you album");
-      setShowForm(false);
+    } else {
+      alert("Title and url must not be empty");
     }
   };
 
@@ -70,6 +92,8 @@ export default function AddVideo({ videosData, dataChange }) {
             name="urlVideo"
             variant="standard"
             sx={{ width: 0.3 }}
+            value={url}
+            onChange={handleOnChange}
           />
           <Button
             variant="contained"
