@@ -25,7 +25,7 @@ app.listen(port, () => console.log(`Listening on port ${port}`));
 app.get("/", (req, res) => {
   // Delete this line after you've confirmed your server is running
   // res.send({ express: "Your Backend Service is Running" });
-  res.json({ videosData });
+  res.json(videosData);
 });
 
 app.post("/", (req, res) => {
@@ -47,7 +47,7 @@ app.post("/", (req, res) => {
         //check if url or title is already exist in your album
         // This is not working right now becuse we are sending only id
         // This when the video added to our data
-        const arrayurl =   videosData.map((video) => video.url);
+        const arrayurl = videosData.map((video) => video.url);
         const arraytitle = videosData.map((video) => video.title);
         if (
           arrayurl.includes(req.body.url) ||
@@ -57,8 +57,7 @@ app.post("/", (req, res) => {
           // res.send(`url of this video already exist in your album`);
           res.json(jsonFail);
           return;
-        }
-        else {
+        } else {
           // I know there are many options for creating videos id, but I would like make it as 6 digist and unique as follows
           const arrayId = videosData.map((video) => parseInt(video.id));
           let id = arrayId[0];
@@ -69,11 +68,45 @@ app.post("/", (req, res) => {
           return;
         }
       } else {
-        console.log("fail url")
         res.json(jsonFail);
         return;
       }
     })();
+    return;
+  }
+});
+
+//get video by id
+
+app.get("/:id", (req, res) => {
+  const requestedIndex = videosData.findIndex(
+    (video) => video.id.toString() === req.params.id
+  );
+  if (requestedIndex >= 0) {
+    res.json(videosData[requestedIndex]);
+    return;
+  } else {
+    res.status(400).send("Bad request");
+    return;
+  }
+});
+
+
+app.delete("/:id", (req, res) => {
+  const requestedIndex = videosData.findIndex(
+    (video) => video.id.toString() === req.params.id
+  );
+
+  if (requestedIndex >= 0) {
+    videosData=videosData.filter((video, index) => index!==requestedIndex)
+    videosData=[...videosData];
+    res.json({});
+    return;
+  } else {
+    res.json({
+      "result": "failure",
+      "message": "Video could not be deleted"
+    });
     return;
   }
 });
