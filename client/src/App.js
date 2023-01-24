@@ -1,19 +1,25 @@
-import React from "react";
+import {React, useState} from "react";
 import "./App.css";
-import Video from "./Video";
-import dataVideos from "./exampleresponse.json";
+import data from "./exampleresponse.json";
+import Header from "./Components/Header";
+import VideoCards from "./Components/VideoCards";
+import AddVideo from "./Components/AddVideo";
+
 
 function App() {
+
+
+  //Make data flxible and can be changed
+  let  [videosData, setVideosData]=useState(data);
+
+  const changeData=(data)=>{
+    setVideosData(data)
+    }
   return (
     <div className="App">
-      <header className="App-header">
-        <h1>Video Recommendation</h1>
-      </header>
-      <body>
-        {dataVideos.map((video, key) => (
-          <Video video={video} key={key}/>
-        ))}
-      </body>
+<Header/>
+<AddVideo videosData={videosData}  dataChange={changeData}/>
+<VideoCards videosData={videosData}  dataChange={changeData}/>
     </div>
   );
 }

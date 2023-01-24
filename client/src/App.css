@@ -6,14 +6,14 @@ header {
   display: block;
 }
 
-.App-header{
+.App-header {
   color: #fff;
   font-style: oblique;
   background-color: #254e70;
   padding: 2rem 0;
 }
 
-body{
+/* body{
   display: flex;
   flex-flow: row wrap;
   justify-content: space-around;
@@ -21,36 +21,62 @@ body{
   padding: 0;
   font-size: 1rem;
   font-weight: 400;
+} */
+
+.tag-wrap {
+  -webkit-box-shadow: 0 3px 5px rgba(57, 63, 72, 0.3);
+  -moz-box-shadow: 0 3px 5px rgba(57, 63, 72, 0.3);
+  /* box-shadow: 0 3px 5px rgba(57, 63, 72, 0.3); */
+  /* padding-bottom: 10rem; */
+  /* background-color: rgb(200, 189, 30); */
+  /* border: 10px solid red;  */
 }
 
-.video-container{
-  display: flex;
-  flex-flow: column nowrap;
-  align-items:center;
-  margin: 1rem;
-  width: 20rem;
-  height: fit-content;
-}
-.video-container > p {
-  margin: 0;
-}
-button{
-  background-color: white;
-  border: none;
+.tag {
+  width: 100%;
+  background: #bebebe;
+  color: #222;
+  font: bold 32px system-ui;
+  padding-bottom: 5rem;
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 0 60%);
+  -moz-box-shadow: 0 3px 5px rgba(57, 63, 72, 0.3);
 }
 
-.delete-button{
-  margin-top: 2rem;
+h1 {
+  font-size: 5rem;
+}
+
+.card {
+  margin: 10px;
+  background-color: #fff;
   border-radius: 10px;
+  box-shadow: 0 2px 20px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+  height: 460px;
+  margin-top: 25px;
+}
+.img-fluid {
+  height: 300px;
+}
+.badge {
+  border-radius: 50px;
+  margin-bottom: 10px;
+}
+.articletag {
+  text-align: center;
+  font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
+    "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
+  font-size: 26px;
 }
 
-.vote-container{
-  display: flex;
-  flex-flow: row nowrap;
-  justify-content:center;
-  margin: 0 0 1rem 0;
+.card-title {
+  padding: 5%;
+  height: 30%;
+  background-color: rgb(244, 244, 244);
+  font-size: 1.5rem;
+  font-weight: 500;
 }
-.vote-container > p{
-  padding: 0;
-  margin: 0;
+
+.LikeAndDislike {
+  width: 100%;
 }
