@@ -7,7 +7,7 @@ const useStyles = makeStyles({
   customButton: {
     color: "red",
     borderRadius: 98,
-  },cd ..
+  },
 });
 
 export default function DislikeIcon({ decreaseVote, indexElm }) {
