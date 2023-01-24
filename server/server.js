@@ -29,53 +29,48 @@ app.get("/", (req, res) => {
 });
 
 app.post("/", (req, res) => {
+  // send(`Title and url of the Video can't be empty`);
+  const jsonFail = {
+    result: "failure",
+    message: "Video could not be saved",
+  };
   if (!req.body.title || !req.body.url) {
-    res.status(400).send(`Title and url of the Video can't be empty`);
+    res.status(400);
+    res.json(jsonFail);
     return;
   } else {
-    let exists;
+    // check the url and title is dublicate
     (async () => {
-       exists = await urlExist(req.body.url);
+      const exists = await urlExist(req.body.url);
       // Handle result
       if (exists) {
-        // I know there are many options for creating videos id, but I would like make it as 6 digist and unique as follows
-        const arrayId = videosData.map((video) => parseInt(video.id));
-        let id = arrayId[0];
-        while (arrayId.includes(id)) {
-          id = Math.floor(100000 + Math.random() * 900000);
-        }
-
-        //check if url is already exist in your album
-        const arrayurl = videosData.map(
-          (video) => video.url );
-        if (arrayurl.includes(req.body.url)) {
-          res.status(400)
-          res.send(`url of this video already exist in your album`);
+        //check if url or title is already exist in your album
+        // This is not working right now becuse we are sending only id
+        // This when the video added to our data
+        const arrayurl =   videosData.map((video) => video.url);
+        const arraytitle = videosData.map((video) => video.title);
+        if (
+          arrayurl.includes(req.body.url) ||
+          arraytitle.includes(req.body.title)
+        ) {
+          // res.status(400);
+          // res.send(`url of this video already exist in your album`);
+          res.json(jsonFail);
           return;
         }
-        //check if title is already exist in your album
-        const arraytitle = videosData.map(
-          (video) => video.title );
-        if (arraytitle.includes(req.body.title)) {
-          res.status(400).send(`This title alreay exist in your album`);
+        else {
+          // I know there are many options for creating videos id, but I would like make it as 6 digist and unique as follows
+          const arrayId = videosData.map((video) => parseInt(video.id));
+          let id = arrayId[0];
+          while (arrayId.includes(id)) {
+            id = Math.floor(100000 + Math.random() * 900000);
+          }
+          res.json(id);
           return;
         }
-        let newVideo = {};
-        newVideo.id = id;
-        newVideo.title = req.body.title;
-        newVideo.url = req.body.url;
-        newVideo.rating = 0;
-        const now = new Date();
-        const date = now.toLocaleDateString();
-        const time = now.toLocaleTimeString();
-        newVideo.date = date;
-        newVideo.time = time;
-        videosData.push(newVideo);
-        res.json(videosData);
-        return;
       } else {
-        res.status(400);
-        res.send(`Youtube URL is not exist`);
+        console.log("fail url")
+        res.json(jsonFail);
         return;
       }
     })();
