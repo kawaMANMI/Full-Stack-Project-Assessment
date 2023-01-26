@@ -99,7 +99,7 @@ app.delete("/:id", (req, res) => {
   if (requestedIndex >= 0) {
     videosData = videosData.filter((video, index) => index !== requestedIndex);
     videosData = [...videosData];
-    console.log("Kawa")
+    // console.log("Kawa");
     res.json(videosData);
     return;
   } else {
@@ -111,20 +111,18 @@ app.delete("/:id", (req, res) => {
   }
 });
 
-
-//Ordering data 
+//Ordering data
 app.get("/", (req, res) => {
-  const typeOfOrder=req.query.order;
+  const typeOfOrder = req.query.order;
   const orderDataAccordingToVoteRate = (data, sign) => {
-    data.sort((a, b) => sign*b.rating - sign* a.rating);
+    data.sort((a, b) => sign * b.rating - sign * a.rating);
     data = [...data];
     return data;
   };
-  if (typeOfOrder==="asc"){
-    orderDataAccordingToVoteRate(videosData,-1)
-  }
-  else if (typeOfOrder==="desc" || !typeOfOrder){
-  orderDataAccordingToVoteRate(videosData,1)
+  if (typeOfOrder === "asc") {
+    orderDataAccordingToVoteRate(videosData, -1);
+  } else if (typeOfOrder === "desc" || !typeOfOrder) {
+    orderDataAccordingToVoteRate(videosData, 1);
   }
   res.json(videosData);
 });
