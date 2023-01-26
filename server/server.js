@@ -4,7 +4,7 @@ const require = createRequire(import.meta.url);
 const express = require("express");
 const app = express();
 import urlExist from "url-exist";
-// const cors = require("cors");
+const cors = require("cors");
 const bp = require("body-parser");
 // const moment = require("moment");
 // var validator = require("email-validator");
@@ -12,7 +12,7 @@ const bp = require("body-parser");
 app.use(bp.json());
 app.use(bp.urlencoded({ extended: true }));
 app.use(express.json());
-// app.use(cors());
+app.use(cors());
 const port = process.env.PORT || 5000;
 let videosData = require("./exampleresponse.json");
 app.listen(port, () => console.log(`Listening on port ${port}`));
@@ -22,11 +22,11 @@ app.listen(port, () => console.log(`Listening on port ${port}`));
 // let videos = [];
 
 // GET "/"
-app.get("/", (req, res) => {
-  // Delete this line after you've confirmed your server is running
-  // res.send({ express: "Your Backend Service is Running" });
-  res.json(videosData);
-});
+// app.get("/", (req, res) => {
+//   // Delete this line after you've confirmed your server is running
+//   // res.send({ express: "Your Backend Service is Running" });
+//   res.json(videosData);
+// });
 
 app.post("/", (req, res) => {
   // send(`Title and url of the Video can't be empty`);
@@ -91,22 +91,39 @@ app.get("/:id", (req, res) => {
   }
 });
 
-
 app.delete("/:id", (req, res) => {
   const requestedIndex = videosData.findIndex(
     (video) => video.id.toString() === req.params.id
   );
 
   if (requestedIndex >= 0) {
-    videosData=videosData.filter((video, index) => index!==requestedIndex)
-    videosData=[...videosData];
+    videosData = videosData.filter((video, index) => index !== requestedIndex);
+    videosData = [...videosData];
     res.json({});
     return;
   } else {
     res.json({
-      "result": "failure",
-      "message": "Video could not be deleted"
+      result: "failure",
+      message: "Video could not be deleted",
     });
     return;
   }
+});
+
+
+//Ordering data 
+app.get("/", (req, res) => {
+  const typeOfOrder=req.query.order;
+  const orderDataAccordingToVoteRate = (data, sign) => {
+    data.sort((a, b) => sign*b.rating - sign* a.rating);
+    data = [...data];
+    return data;
+  };
+  if (typeOfOrder==="asc"){
+    orderDataAccordingToVoteRate(videosData,-1)
+  }
+  else if (typeOfOrder==="desc" || !typeOfOrder){
+  orderDataAccordingToVoteRate(videosData,1)
+  }
+  res.json(videosData);
 });
