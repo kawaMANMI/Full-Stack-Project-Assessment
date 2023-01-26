@@ -99,7 +99,8 @@ app.delete("/:id", (req, res) => {
   if (requestedIndex >= 0) {
     videosData = videosData.filter((video, index) => index !== requestedIndex);
     videosData = [...videosData];
-    res.json({});
+    console.log("Kawa")
+    res.json(videosData);
     return;
   } else {
     res.json({
