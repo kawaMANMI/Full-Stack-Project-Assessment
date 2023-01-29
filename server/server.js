@@ -28,7 +28,7 @@ app.listen(port, () => console.log(`Listening on port ${port}`));
 //   res.json(videosData);
 // });
 
-app.post("/", (req, res) => {
+app.post("/video", (req, res) => {
   // send(`Title and url of the Video can't be empty`);
   const jsonFail = {
     result: "failure",
@@ -64,7 +64,18 @@ app.post("/", (req, res) => {
           while (arrayId.includes(id)) {
             id = Math.floor(100000 + Math.random() * 900000);
           }
-          res.json(id);
+          const videoToAdd = {};
+          videoToAdd.id = id;
+          videoToAdd.title = req.body.title;
+          videoToAdd.url = req.body.url;
+          videoToAdd.rating = 0;
+          const now = new Date();
+          const date = now.toLocaleDateString();
+          const time = now.toLocaleTimeString();
+          videoToAdd.date = date;
+          videoToAdd.time = time;
+          videosData.push(videoToAdd);
+          res.json(videosData);
           return;
         }
       } else {
@@ -78,7 +89,7 @@ app.post("/", (req, res) => {
 
 //get video by id
 
-app.get("/:id", (req, res) => {
+app.get("/video/:id", (req, res) => {
   const requestedIndex = videosData.findIndex(
     (video) => video.id.toString() === req.params.id
   );
@@ -91,7 +102,7 @@ app.get("/:id", (req, res) => {
   }
 });
 
-app.delete("/:id", (req, res) => {
+app.delete("/video/:id", (req, res) => {
   const requestedIndex = videosData.findIndex(
     (video) => video.id.toString() === req.params.id
   );
@@ -112,7 +123,7 @@ app.delete("/:id", (req, res) => {
 });
 
 //Ordering data
-app.get("/", (req, res) => {
+app.get("/videos", (req, res) => {
   const typeOfOrder = req.query.order;
   const orderDataAccordingToVoteRate = (data, sign) => {
     data.sort((a, b) => sign * b.rating - sign * a.rating);
@@ -126,3 +137,52 @@ app.get("/", (req, res) => {
   }
   res.json(videosData);
 });
+
+// This was for level 200, just as requirement of the task
+// app.post("/video", (req, res) => {
+//   // send(`Title and url of the Video can't be empty`);
+//   const jsonFail = {
+//     result: "failure",
+//     message: "Video could not be saved",
+//   };
+//   if (!req.body.title || !req.body.url) {
+//     res.status(400);
+//     res.json(jsonFail);
+//     return;
+//   } else {
+//     // check the url and title is dublicate
+//     (async () => {
+//       const exists = await urlExist(req.body.url);
+//       // Handle result
+//       if (exists) {
+//         //check if url or title is already exist in your album
+//         // This is not working right now becuse we are sending only id
+//         // This when the video added to our data
+//         const arrayurl = videosData.map((video) => video.url);
+//         const arraytitle = videosData.map((video) => video.title);
+//         if (
+//           arrayurl.includes(req.body.url) ||
+//           arraytitle.includes(req.body.title)
+//         ) {
+//           // res.status(400);
+//           // res.send(`url of this video already exist in your album`);
+//           res.json(jsonFail);
+//           return;
+//         } else {
+//           // I know there are many options for creating videos id, but I would like make it as 6 digist and unique as follows
+//           const arrayId = videosData.map((video) => parseInt(video.id));
+//           let id = arrayId[0];
+//           while (arrayId.includes(id)) {
+//             id = Math.floor(100000 + Math.random() * 900000);
+//           }
+//           res.json(id);
+//           return;
+//         }
+//       } else {
+//         res.json(jsonFail);
+//         return;
+//       }
+//     })();
+//     return;
+//   }
+// });
