@@ -1,11 +1,12 @@
-
 import { createRequire } from "module";
 const require = createRequire(import.meta.url);
 const express = require("express");
-const app = express();
-import urlExist from "url-exist";
-const cors = require("cors");
 const bp = require("body-parser");
+const app = express();
+const { Pool } = require("pg");
+import urlExist from "url-exist";
+// import { videosData } from "./queries";
+const cors = require("cors");
 // const moment = require("moment");
 // var validator = require("email-validator");
 
@@ -14,7 +15,8 @@ app.use(bp.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cors());
 const port = process.env.PORT || 5000;
-let videosData = require("./exampleresponse.json");
+// let videosData = require("./exampleresponse.json");
+let videosData = [];
 app.listen(port, () => console.log(`Listening on port ${port}`));
 
 // Store and retrieve your videos from here
@@ -27,6 +29,27 @@ app.listen(port, () => console.log(`Listening on port ${port}`));
 //   // res.send({ express: "Your Backend Service is Running" });
 //   res.json(videosData);
 // });
+
+const pool = new Pool({
+  user: "postgres",
+  host: "localhost",
+  database: "videosproject_kawa_cyf",
+  password: "cyf_wm42023",
+  port: 5432,
+});
+
+
+
+
+//   const data = await new Promise((resolve) => {
+//     pool.query("select * from videodetials;", (err, res) => {
+//       resolve(res.rows);
+//     });
+//   });
+//   videosData = data;
+//   // console.log(videosData)
+//   // do whatever comes next here...
+// })();
 
 app.post("/video", (req, res) => {
   // send(`Title and url of the Video can't be empty`);
@@ -90,6 +113,8 @@ app.post("/video", (req, res) => {
 //get video by id
 
 app.get("/video/:id", (req, res) => {
+
+  if (req.params.)
   const requestedIndex = videosData.findIndex(
     (video) => video.id.toString() === req.params.id
   );
@@ -122,21 +147,8 @@ app.delete("/video/:id", (req, res) => {
   }
 });
 
-//Ordering data
-app.get("/videos", (req, res) => {
-  const typeOfOrder = req.query.order;
-  const orderDataAccordingToVoteRate = (data, sign) => {
-    data.sort((a, b) => sign * b.rating - sign * a.rating);
-    data = [...data];
-    return data;
-  };
-  if (typeOfOrder === "asc") {
-    orderDataAccordingToVoteRate(videosData, -1);
-  } else if (typeOfOrder === "desc" || !typeOfOrder) {
-    orderDataAccordingToVoteRate(videosData, 1);
-  }
-  res.json(videosData);
-});
+
+
 
 // This was for level 200, just as requirement of the task
 // app.post("/video", (req, res) => {
@@ -186,3 +198,5 @@ app.get("/videos", (req, res) => {
 //     return;
 //   }
 // });
+
+
