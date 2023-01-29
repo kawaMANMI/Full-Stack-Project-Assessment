@@ -106,22 +106,15 @@ app.get("/video/:id", (req, res) => {
   });
 
 app.delete("/video/:id", (req, res) => {
-  const requestedIndex = videosData.findIndex(
-    (video) => video.id.toString() === req.params.id
-  );
-
-  if (requestedIndex >= 0) {
-    videosData = videosData.filter((video, index) => index !== requestedIndex);
-    videosData = [...videosData];
-    res.json(videosData);
-    return;
-  } else {
-    res.json({
-      result: "failure",
-      message: "Video could not be deleted",
+  const videoId = req.params.id;
+  pool
+    .query("DELETE FROM videodetials WHERE id=$1", [videoId])
+    .then(() => pool.query("SELECT * FROM videodetials")
+    .then((result) => res.json(result.rows)))
+    .catch((error) => {
+      res.status(500).json(error);
     });
-    return;
-  }
+
 });
 
 
