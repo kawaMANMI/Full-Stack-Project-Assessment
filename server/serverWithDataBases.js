@@ -1,22 +1,18 @@
 import { createRequire } from "module";
 const require = createRequire(import.meta.url);
 const express = require("express");
-const bp = require("body-parser");
 const app = express();
-const { Pool } = require("pg");
 import urlExist from "url-exist";
-// import { videosData } from "./queries";
 const cors = require("cors");
-// const moment = require("moment");
-// var validator = require("email-validator");
+const bp = require("body-parser");
+const { Pool } = require("pg");
 
 app.use(bp.json());
 app.use(bp.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cors());
 const port = process.env.PORT || 5000;
-// let videosData = require("./exampleresponse.json");
-let videosData = [];
+let videosData = require("./exampleresponse.json");
 app.listen(port, () => console.log(`Listening on port ${port}`));
 
 // Store and retrieve your videos from here
@@ -30,6 +26,7 @@ app.listen(port, () => console.log(`Listening on port ${port}`));
 //   res.json(videosData);
 // });
 
+
 const pool = new Pool({
   user: "postgres",
   host: "localhost",
@@ -37,19 +34,6 @@ const pool = new Pool({
   password: "cyf_wm42023",
   port: 5432,
 });
-
-
-
-
-//   const data = await new Promise((resolve) => {
-//     pool.query("select * from videodetials;", (err, res) => {
-//       resolve(res.rows);
-//     });
-//   });
-//   videosData = data;
-//   // console.log(videosData)
-//   // do whatever comes next here...
-// })();
 
 app.post("/video", (req, res) => {
   // send(`Title and url of the Video can't be empty`);
@@ -113,19 +97,13 @@ app.post("/video", (req, res) => {
 //get video by id
 
 app.get("/video/:id", (req, res) => {
-
-  if (req.params.)
-  const requestedIndex = videosData.findIndex(
-    (video) => video.id.toString() === req.params.id
-  );
-  if (requestedIndex >= 0) {
-    res.json(videosData[requestedIndex]);
-    return;
-  } else {
-    res.status(400).send("Bad request");
-    return;
-  }
-});
+    pool
+    .query("SELECT * FROM videodetials WHERE id=$1", [req.params.id])
+    .then((result) => res.json(result.rows))
+    .catch((error) => {
+      res.status(400).json(error);
+    });
+  });
 
 app.delete("/video/:id", (req, res) => {
   const requestedIndex = videosData.findIndex(
@@ -135,7 +113,6 @@ app.delete("/video/:id", (req, res) => {
   if (requestedIndex >= 0) {
     videosData = videosData.filter((video, index) => index !== requestedIndex);
     videosData = [...videosData];
-    // console.log("Kawa");
     res.json(videosData);
     return;
   } else {
@@ -148,55 +125,30 @@ app.delete("/video/:id", (req, res) => {
 });
 
 
-
-
-// This was for level 200, just as requirement of the task
-// app.post("/video", (req, res) => {
-//   // send(`Title and url of the Video can't be empty`);
-//   const jsonFail = {
-//     result: "failure",
-//     message: "Video could not be saved",
-//   };
-//   if (!req.body.title || !req.body.url) {
-//     res.status(400);
-//     res.json(jsonFail);
-//     return;
-//   } else {
-//     // check the url and title is dublicate
-//     (async () => {
-//       const exists = await urlExist(req.body.url);
-//       // Handle result
-//       if (exists) {
-//         //check if url or title is already exist in your album
-//         // This is not working right now becuse we are sending only id
-//         // This when the video added to our data
-//         const arrayurl = videosData.map((video) => video.url);
-//         const arraytitle = videosData.map((video) => video.title);
-//         if (
-//           arrayurl.includes(req.body.url) ||
-//           arraytitle.includes(req.body.title)
-//         ) {
-//           // res.status(400);
-//           // res.send(`url of this video already exist in your album`);
-//           res.json(jsonFail);
-//           return;
-//         } else {
-//           // I know there are many options for creating videos id, but I would like make it as 6 digist and unique as follows
-//           const arrayId = videosData.map((video) => parseInt(video.id));
-//           let id = arrayId[0];
-//           while (arrayId.includes(id)) {
-//             id = Math.floor(100000 + Math.random() * 900000);
-//           }
-//           res.json(id);
-//           return;
-//         }
-//       } else {
-//         res.json(jsonFail);
-//         return;
-//       }
-//     })();
-//     return;
-//   }
-// });
-
+app.get("/videos", (req, res) => {
+  let typeOfOrder = req.query.order;
+  if (typeOfOrder === "asc") {
+    pool
+    .query("SELECT * FROM videodetials ORDER BY rating ASC")
+    .then((result) => res.json(result.rows))
+    .catch((error) => {
+      res.status(400).json(error);
+    });
+  } else if (typeOfOrder === "desc" || !typeOfOrder) {
+    pool
+    .query("SELECT * FROM videodetials ORDER BY rating DESC")
+    .then((result) => res.json(result.rows))
+    .catch((error) => {
+      res.status(400).json(error);
+    });
+  }
+  else  {
+    pool
+    .query("SELECT * FROM videodetials")
+    .then((result) => res.json(result.rows))
+    .catch((error) => {
+      res.status(400).json(error);
+    });
+  }
+});
 
