@@ -32,18 +32,18 @@ const pool = new Pool({
   // database: "videosproject_kawa_cyf",
   // password: "xea5cgoHN7vSXkLYgi1pV60RwVRdJIQK",
   // port: 5432,
-  connectionString: "postgres://kawa:xea5cgoHN7vSXkLYgi1pV60RwVRdJIQK@dpg-cfbi33pgp3jsh6aqrnag-a.oregon-postgres.render.com/videosproject_kawa_cyf",
+  connectionString:
+    "postgres://kawa:xea5cgoHN7vSXkLYgi1pV60RwVRdJIQK@dpg-cfbi33pgp3jsh6aqrnag-a.oregon-postgres.render.com/videosproject_kawa_cyf",
   ssl: { rejectUnauthorized: false },
 });
 
 pool.connect((err) => {
   if (err) {
-    console.error('Error connecting to the database: ' + err.stack);
+    console.error("Error connecting to the database: " + err.stack);
     return;
   }
-  console.log('Connected to the database');
+  console.log("Connected to the database");
 });
-
 
 app.post("/video", (req, res) => {
   // send(`Title and url of the Video can't be empty`);
@@ -67,16 +67,15 @@ app.post("/video", (req, res) => {
         const checkDublicateUrl = await pool
           .query("select EXISTS (SELECT  * FROM videodetials  WHERE url=$1)", [
             req.body.url,
-          ]).then((result) => result.rows)
-          
+          ])
+          .then((result) => result.rows);
 
-
-        const checkDublicateTitle =  await pool
+        const checkDublicateTitle = await pool
           .query(
             "select EXISTS (SELECT  * FROM videodetials  WHERE title=$1)",
             [req.body.title]
-          ).then((result) => result.rows)
-          
+          )
+          .then((result) => result.rows);
 
         if (!checkDublicateUrl[0].exists && !checkDublicateTitle[0].exists) {
           const maximumId = await pool
@@ -95,14 +94,12 @@ app.post("/video", (req, res) => {
               0,
               new Date(),
             ])
-            .then((result) => res.json( maximumId[0].max + 1))
+            .then((result) => res.json(maximumId[0].max + 1))
             .catch((error) => {
               res.status(500).json(jsonFail);
             });
-            return;
-        }
-        else 
-        res.status(500).json(jsonFail);
+          return;
+        } else res.status(500).json(jsonFail);
         return;
       }
       res.status(500).json(jsonFail);
@@ -112,19 +109,19 @@ app.post("/video", (req, res) => {
   }
 });
 
-
-
 //Adding like or Dislike
 app.post("/video/likedislike/:id/:type", (req, res) => {
   pool
-  .query("UPDATE videodetials SET rating=rating+$1 WHERE id=$2", [req.params.type, req.params.id])
-  .then(() => res.json("updated"))
-  .catch((error) => {
-    res.status(500).json(error);
-    return;
-  });
+    .query("UPDATE videodetials SET rating=rating+$1 WHERE id=$2", [
+      req.params.type,
+      req.params.id,
+    ])
+    .then(() => res.json("updated"))
+    .catch((error) => {
+      res.status(500).json(error);
+      return;
+    });
 });
-
 
 //get video by id
 app.get("/video/:id", (req, res) => {
