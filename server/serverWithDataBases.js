@@ -7,7 +7,6 @@ import { resourceLimits } from "worker_threads";
 const cors = require("cors");
 const bp = require("body-parser");
 const { Pool } = require("pg");
-
 app.use(bp.json());
 app.use(bp.urlencoded({ extended: true }));
 app.use(express.json());
