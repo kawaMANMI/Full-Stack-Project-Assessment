@@ -3,6 +3,7 @@ const require = createRequire(import.meta.url);
 const express = require("express");
 const app = express();
 import urlExist from "url-exist";
+import { resourceLimits } from "worker_threads";
 const cors = require("cors");
 const bp = require("body-parser");
 const { Pool } = require("pg");
@@ -25,7 +26,6 @@ app.listen(port, () => console.log(`Listening on port ${port}`));
 //   // res.send({ express: "Your Backend Service is Running" });
 //   res.json(videosData);
 // });
-
 
 const pool = new Pool({
   user: "postgres",
@@ -54,41 +54,49 @@ app.post("/video", (req, res) => {
         //check if url or title is already exist in your album
         // This is not working right now becuse we are sending only id
         // This when the video added to our data
-        const arrayurl = videosData.map((video) => video.url);
-        const arraytitle = videosData.map((video) => video.title);
-        if (
-          arrayurl.includes(req.body.url) ||
-          arraytitle.includes(req.body.title)
-        ) {
-          // res.status(400);
-          // res.send(`url of this video already exist in your album`);
-          res.json(jsonFail);
-          return;
-        } else {
-          // I know there are many options for creating videos id, but I would like make it as 6 digist and unique as follows
-          const arrayId = videosData.map((video) => parseInt(video.id));
-          let id = arrayId[0];
-          while (arrayId.includes(id)) {
-            id = Math.floor(100000 + Math.random() * 900000);
-          }
-          const videoToAdd = {};
-          videoToAdd.id = id;
-          videoToAdd.title = req.body.title;
-          videoToAdd.url = req.body.url;
-          videoToAdd.rating = 0;
-          const now = new Date();
-          const date = now.toLocaleDateString();
-          const time = now.toLocaleTimeString();
-          videoToAdd.date = date;
-          videoToAdd.time = time;
-          videosData.push(videoToAdd);
-          res.json(videosData);
-          return;
+        const checkDublicateUrl = await pool
+          .query("select EXISTS (SELECT  * FROM videodetials  WHERE url=$1)", [
+            req.body.url,
+          ]).then((result) => result.rows)
+          
+
+
+        const checkDublicateTitle =  await pool
+          .query(
+            "select EXISTS (SELECT  * FROM videodetials  WHERE title=$1)",
+            [req.body.title]
+          ).then((result) => result.rows)
+          
+
+        if (!checkDublicateUrl[0].exists && !checkDublicateTitle[0].exists) {
+          const maximumId = await pool
+            .query("select MAX(id) FROM videodetials")
+            .then((result) => result.rows)
+            .catch((error) => {
+              res.status(500).json(error);
+            });
+          const query =
+            "INSERT INTO VideoDetials (id, title, url, rating, upload_date) VALUES ($1, $2, $3, $4, $5)";
+          await pool
+            .query(query, [
+              maximumId[0].max + 1,
+              req.body.title,
+              req.body.url,
+              0,
+              new Date(),
+            ])
+            .then((result) => res.json( maximumId[0].max + 1))
+            .catch((error) => {
+              res.status(500).json(jsonFail);
+            });
+            return;
         }
-      } else {
-        res.json(jsonFail);
+        else 
+        res.status(500).json(jsonFail);
         return;
       }
+      res.status(500).json(jsonFail);
+      return;
     })();
     return;
   }
@@ -97,51 +105,50 @@ app.post("/video", (req, res) => {
 //get video by id
 
 app.get("/video/:id", (req, res) => {
-    pool
+  pool
     .query("SELECT * FROM videodetials WHERE id=$1", [req.params.id])
     .then((result) => res.json(result.rows))
     .catch((error) => {
       res.status(400).json(error);
     });
-  });
+});
 
 app.delete("/video/:id", (req, res) => {
   const videoId = req.params.id;
   pool
     .query("DELETE FROM videodetials WHERE id=$1", [videoId])
-    .then(() => pool.query("SELECT * FROM videodetials")
-    .then((result) => res.json(result.rows)))
+    .then(() =>
+      pool
+        .query("SELECT * FROM videodetials")
+        .then((result) => res.json(result.rows))
+    )
     .catch((error) => {
       res.status(500).json(error);
     });
-
 });
-
 
 app.get("/videos", (req, res) => {
   let typeOfOrder = req.query.order;
   if (typeOfOrder === "asc") {
     pool
-    .query("SELECT * FROM videodetials ORDER BY rating ASC")
-    .then((result) => res.json(result.rows))
-    .catch((error) => {
-      res.status(400).json(error);
-    });
+      .query("SELECT * FROM videodetials ORDER BY rating ASC")
+      .then((result) => res.json(result.rows))
+      .catch((error) => {
+        res.status(400).json(error);
+      });
   } else if (typeOfOrder === "desc" || !typeOfOrder) {
     pool
-    .query("SELECT * FROM videodetials ORDER BY rating DESC")
-    .then((result) => res.json(result.rows))
-    .catch((error) => {
-      res.status(400).json(error);
-    });
-  }
-  else  {
+      .query("SELECT * FROM videodetials ORDER BY rating DESC")
+      .then((result) => res.json(result.rows))
+      .catch((error) => {
+        res.status(400).json(error);
+      });
+  } else {
     pool
-    .query("SELECT * FROM videodetials")
-    .then((result) => res.json(result.rows))
-    .catch((error) => {
-      res.status(400).json(error);
-    });
+      .query("SELECT * FROM videodetials")
+      .then((result) => res.json(result.rows))
+      .catch((error) => {
+        res.status(400).json(error);
+      });
   }
 });
-
