@@ -102,8 +102,21 @@ app.post("/video", (req, res) => {
   }
 });
 
-//get video by id
 
+
+//Adding like or Dislike
+app.post("/video/likedislike/:id/:type", (req, res) => {
+  pool
+  .query("UPDATE videodetials SET rating=rating+$1 WHERE id=$2", [req.params.type, req.params.id])
+  .then(() => res.json("updated"))
+  .catch((error) => {
+    res.status(500).json(error);
+    return;
+  });
+});
+
+
+//get video by id
 app.get("/video/:id", (req, res) => {
   pool
     .query("SELECT * FROM videodetials WHERE id=$1", [req.params.id])
