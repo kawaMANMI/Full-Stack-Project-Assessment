@@ -5,12 +5,13 @@ import Header from "./Components/Header";
 import ToggleAscDesc from "./Components/ToggleAscDesc";
 import VideoCards from "./Components/VideoCards";
 import AddVideo from "./Components/AddVideo";
+import Footer from "./Components/Footer";
 
 function App() {
   const [data, setData] = useState([]);
 
   const fetchMyAPI = useCallback(async () => {
-    let response = await fetch("https://kawa-full-stack-cyf.onrender.com/");
+    let response = await fetch("https://kawa-full-stack-cyf.onrender.com/videos/");
     response = await response.json();
     setData(orderDataAccordingToVoteRate(response));
   }, []);
@@ -29,13 +30,15 @@ function App() {
   const changeData = (data) => {
     // orderDataAccordingToVoteRate(data); //Live sorting after each change on data, resort again according to the rate
     setData(data);
+    // console.log(data)
   };
   return (
     <div className="App">
       <Header />
+      <AddVideo videosData={data} changeData={changeData} />
       <ToggleAscDesc  changeData={changeData}/>
-      <AddVideo videosData={data} dataChange={changeData} />
-      <VideoCards videosData={data} dataChange={changeData} />
+      <VideoCards videosData={data} changeData={changeData} />
+      <Footer/>
     </div>
   );
 }

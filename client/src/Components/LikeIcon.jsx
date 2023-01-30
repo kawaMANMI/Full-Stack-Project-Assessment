@@ -17,6 +17,9 @@ const useStyles = makeStyles({
   },
 });
 
+
+
+
 export default function LikeIcon({ increaseVote, indexElm }) {
   const classes = useStyles();
 
