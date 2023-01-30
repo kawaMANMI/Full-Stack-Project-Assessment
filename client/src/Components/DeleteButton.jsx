@@ -10,9 +10,12 @@ const useStyles = makeStyles({
 });
 
 const fetchMyAPI = async (id) => {
-  let response = await fetch(`https://kawa-full-stack-cyf.onrender.com/video/${id}`, {
-    method: "delete",
-  });
+  let response = await fetch(
+    `https://kawa-full-stack-cyf.onrender.com/video/${id}`,
+    {
+      method: "delete",
+    }
+  );
   response = await response.json();
   return response;
 };
@@ -24,10 +27,10 @@ export default function DeleteButton({ idToDelete, updateData }) {
   // let [id, setId] = useState(null);
 
   const onClickDeleteHandler = async (id) => {
-    if (window.confirm("Click OK to confirm the deletion")){
-    const response = await fetchMyAPI(id);
-    // console.log(response);
-    updateData(response);
+    if (window.confirm("Click OK to confirm the deletion")) {
+      const response = await fetchMyAPI(id);
+      // console.log(response);
+      updateData(response);
     }
   };
 

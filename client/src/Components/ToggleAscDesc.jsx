@@ -9,7 +9,9 @@ export default function ToggleAscDesc({ changeData }) {
   let [query, setQuery] = useState("asc");
 
   const fetchMyAPI = useCallback(async () => {
-    let response = await fetch(`https://kawa-full-stack-cyf.onrender.com/videos/?order=${query}`);
+    let response = await fetch(
+      `https://kawa-full-stack-cyf.onrender.com/videos/?order=${query}`
+    );
     response = await response.json();
     setData(response);
   }, [query]);

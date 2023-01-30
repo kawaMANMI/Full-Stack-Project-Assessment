@@ -18,12 +18,11 @@ const LikeDislikeToDataBase = async (dataToSend) => {
       body: JSON.stringify(dataToSend),
     }
   );
-   response = await response.json();
+  response = await response.json();
   return response;
 };
 
 const VideoCards = ({ videosData, changeData }) => {
-
   const increaseVote = async (index) => {
     const dataToSend = { id: videosData[index].id, type: 1 };
     const response = await LikeDislikeToDataBase(dataToSend);
@@ -37,7 +36,7 @@ const VideoCards = ({ videosData, changeData }) => {
     }
   };
 
-  const decreaseVote =async (index) => {
+  const decreaseVote = async (index) => {
     const dataToSend = { id: videosData[index].id, type: -1 };
     const response = await LikeDislikeToDataBase(dataToSend);
     if (response === "updated") {
@@ -48,7 +47,6 @@ const VideoCards = ({ videosData, changeData }) => {
     } else {
       alert("Failure in updating vote ");
     }
-
   };
 
   //const deleteVideo = (index) => {

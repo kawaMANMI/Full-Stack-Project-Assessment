@@ -11,11 +11,14 @@ const useStyles = makeStyles({
 });
 
 const fetchMyAPI = async (titleAndUrl) => {
-  let response = await fetch(`https://kawa-full-stack-cyf.onrender.com/video/`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(titleAndUrl),
-  });
+  let response = await fetch(
+    `https://kawa-full-stack-cyf.onrender.com/video/`,
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(titleAndUrl),
+    }
+  );
   response = await response.json();
   return response;
 };
@@ -29,9 +32,7 @@ export default function AddVideo({ changeData }) {
   };
 
   const validateUrl = (URL) => {
-    const regex = new RegExp(
-      "(http(s)?://)?((w){3}.)?youtube?(.com)?/.+"
-    );
+    const regex = new RegExp("(http(s)?://)?((w){3}.)?youtube?(.com)?/.+");
     return regex.test(URL);
   };
 
@@ -45,11 +46,9 @@ export default function AddVideo({ changeData }) {
     event.preventDefault();
     const url = event.target.urlVideo.value;
     const title = event.target.titleVideo.value;
-    if (!url || !title)   {
+    if (!url || !title) {
       alert("Title and url must not be empty");
-    }
-    else
-    {
+    } else {
       if (validateUrl(url)) {
         const dataToSend = { title: title, url: url };
         const response = await fetchMyAPI(dataToSend);

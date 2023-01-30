@@ -11,7 +11,9 @@ function App() {
   const [data, setData] = useState([]);
 
   const fetchMyAPI = useCallback(async () => {
-    let response = await fetch("https://kawa-full-stack-cyf.onrender.com/videos/");
+    let response = await fetch(
+      "https://kawa-full-stack-cyf.onrender.com/videos/"
+    );
     response = await response.json();
     setData(orderDataAccordingToVoteRate(response));
   }, []);
@@ -36,9 +38,9 @@ function App() {
     <div className="App">
       <Header />
       <AddVideo videosData={data} changeData={changeData} />
-      <ToggleAscDesc  changeData={changeData}/>
+      <ToggleAscDesc changeData={changeData} />
       <VideoCards videosData={data} changeData={changeData} />
-      <Footer/>
+      <Footer />
     </div>
   );
 }

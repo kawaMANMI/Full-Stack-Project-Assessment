@@ -1,14 +1,18 @@
-import React from 'react';
-import { FaFacebook, FaTwitter, FaInstagram } from 'react-icons/fa';
+import React from "react";
+import { FaFacebook, FaTwitter, FaInstagram } from "react-icons/fa";
 
 const Footer = () => {
   return (
     <footer>
-      <hr/>
+      <hr />
       <div>Copyright © 2023 Kawa from CYF</div>
       <div>
-        <a href="#https://www.linkedin.com/in/kawa-manmi-5244ab53/">Privacy Policy</a>
-        <a href="#https://www.linkedin.com/in/kawa-manmi-5244ab53/">Terms of Use</a>
+        <a href="#https://www.linkedin.com/in/kawa-manmi-5244ab53/">
+          Privacy Policy
+        </a>
+        <a href="#https://www.linkedin.com/in/kawa-manmi-5244ab53/">
+          Terms of Use
+        </a>
       </div>
       <div>
         <a href="#https://www.linkedin.com/in/kawa-manmi-5244ab53/">
@@ -23,6 +27,6 @@ const Footer = () => {
       </div>
     </footer>
   );
-}
+};
 
 export default Footer;
