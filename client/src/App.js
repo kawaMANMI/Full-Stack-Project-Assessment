@@ -31,6 +31,7 @@ function App() {
 
   const changeData = (data) => {
     // orderDataAccordingToVoteRate(data); //Live sorting after each change on data, resort again according to the rate
+    const response =  fetchMyAPI();
     setData(data);
     // console.log(data)
   };
