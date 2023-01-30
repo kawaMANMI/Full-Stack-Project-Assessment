@@ -28,12 +28,23 @@ app.listen(port, () => console.log(`Listening on port ${port}`));
 // });
 
 const pool = new Pool({
-  user: "postgres",
-  host: "localhost",
-  database: "videosproject_kawa_cyf",
-  password: "cyf_wm42023",
-  port: 5432,
+  // user: "kawa",
+  // host: "dpg-cfbi33pgp3jsh6aqrnag-a.oregon-postgres.render.com",
+  // database: "videosproject_kawa_cyf",
+  // password: "xea5cgoHN7vSXkLYgi1pV60RwVRdJIQK",
+  // port: 5432,
+  connectionString: "postgres://kawa:xea5cgoHN7vSXkLYgi1pV60RwVRdJIQK@dpg-cfbi33pgp3jsh6aqrnag-a.oregon-postgres.render.com/videosproject_kawa_cyf",
+  ssl: { rejectUnauthorized: false },
 });
+
+pool.connect((err) => {
+  if (err) {
+    console.error('Error connecting to the database: ' + err.stack);
+    return;
+  }
+  console.log('Connected to the database');
+});
+
 
 app.post("/video", (req, res) => {
   // send(`Title and url of the Video can't be empty`);
