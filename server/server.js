@@ -12,7 +12,7 @@ app.use(bp.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cors());
 const port = process.env.PORT || 5000;
-let videosData = require("./exampleresponse.json");
+// let videosData = require("./exampleresponse.json");
 app.listen(port, () => console.log(`Listening on port ${port}`));
 
 // Store and retrieve your videos from here
