@@ -31,7 +31,7 @@ const pool = new Pool({
   user: "kawa",
   host: "dpg-cfbi33pgp3jsh6aqrnag-a.oregon-postgres.render.com",
   database: "videosproject_kawa_cyf",
-  password: "xea5cgoHN7vSXkLYgi1pV60RwVRdJIQK",
+  password: process.env.DB_PASSWORD,
   ssl: { rejectUnauthorized: false }
   // port: 5432,
   // connectionString:
