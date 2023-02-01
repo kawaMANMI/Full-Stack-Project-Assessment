@@ -35,7 +35,7 @@ const pool = new Pool({
   // ssl: { rejectUnauthorized: false }
   // port: 5432,
   connectionString:
-    `postgres://kawa:xea5cgoHN7vSXkLYgi1pV60RwVRdJIQK@dpg-cfbi33pgp3jsh6aqrnag-a.oregon-postgres.render.com/videosproject_kawa_cyf`,
+    "postgres://kawa:xea5cgoHN7vSXkLYgi1pV60RwVRdJIQK@dpg-cfbi33pgp3jsh6aqrnag-a.oregon-postgres.render.com/videosproject_kawa_cyf",
   ssl: { rejectUnauthorized: false }
 });
 
