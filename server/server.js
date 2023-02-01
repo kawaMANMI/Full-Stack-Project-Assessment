@@ -28,15 +28,15 @@ app.listen(port, () => console.log(`Listening on port ${port}`));
 
 
 const pool = new Pool({
-  user: "kawa",
-  host: "dpg-cfbi33pgp3jsh6aqrnag-a.oregon-postgres.render.com",
-  database: "videosproject_kawa_cyf",
-  password: process.env.DB_PASSWORD,
-  ssl: { rejectUnauthorized: false }
-  // port: 5432,
-  // connectionString:
-  //   "postgres://kawa:xea5cgoHN7vSXkLYgi1pV60RwVRdJIQK@dpg-cfbi33pgp3jsh6aqrnag-a.oregon-postgres.render.com/videosproject_kawa_cyf",
+  // user: "kawa",
+  // host: "dpg-cfbi33pgp3jsh6aqrnag-a.oregon-postgres.render.com",
+  // database: "videosproject_kawa_cyf",
+  // password: process.env.DB_PASSWORD,
   // ssl: { rejectUnauthorized: false }
+  // port: 5432,
+  connectionString:
+    `postgres://kawa:${process.env.DB_PASSWORD}@dpg-cfbi33pgp3jsh6aqrnag-a.oregon-postgres.render.com/videosproject_kawa_cyf`,
+  ssl: { rejectUnauthorized: false }
 });
 
 pool.connect((err) => {
