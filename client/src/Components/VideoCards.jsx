@@ -27,7 +27,7 @@ const VideoCards = ({ videosData, changeData }) => {
     const dataToSend = { id: videosData[index].id, type: 1 };
     const response = await LikeDislikeToDataBase(dataToSend);
     if (response === "updated") {
-      alert("Vote has been update");
+      // alert("Vote has been update");
       videosData[index].rating++;
       videosData = [...videosData];
       changeData(videosData);
@@ -40,7 +40,7 @@ const VideoCards = ({ videosData, changeData }) => {
     const dataToSend = { id: videosData[index].id, type: -1 };
     const response = await LikeDislikeToDataBase(dataToSend);
     if (response === "updated") {
-      alert("Vote has been update");
+      // alert("Vote has been update");
       videosData[index].rating--;
       videosData = [...videosData];
       changeData(videosData);

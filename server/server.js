@@ -34,9 +34,14 @@ const pool = new Pool({
   // password: process.env.DB_PASSWORD,
   // ssl: { rejectUnauthorized: false }
   // port: 5432,
-  connectionString:
-    `postgres://kawa:${process.env.DB_PASSWORD}@dpg-cfbi33pgp3jsh6aqrnag-a.oregon-postgres.render.com/videosproject_kawa_cyf`,
-  ssl: { rejectUnauthorized: false }
+//   connectionString:
+//     `postgres://kawa:${process.env.DB_PASSWORD}@dpg-cfbi33pgp3jsh6aqrnag-a.oregon-postgres.render.com/videosproject_kawa_cyf`,
+//   ssl: { rejectUnauthorized: false }
+// });
+
+connectionString:
+`postgres://kawa:xea5cgoHN7vSXkLYgi1pV60RwVRdJIQK@dpg-cfbi33pgp3jsh6aqrnag-a.oregon-postgres.render.com/videosproject_kawa_cyf`,
+ssl: { rejectUnauthorized: false }
 });
 
 pool.connect((err) => {
@@ -173,4 +178,11 @@ app.get("/videos", (req, res) => {
         res.status(400).json(error);
       });
   }
+});
+
+
+
+app.get('/kawa', (req, res) => {
+  const clientIp = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+  res.send(`Your IP address is: ${clientIp}`);
 });
