@@ -80,6 +80,7 @@ const VideoCards = ({ videosData, changeData }) => {
                 )}`}
                 title={videoDetials.title}
                 key={index + 3000}
+                allowfullscreen
               ></iframe>
               <div className="card-body" key={index + 4000}>
                 <div className="d-flex justify-content-between">
