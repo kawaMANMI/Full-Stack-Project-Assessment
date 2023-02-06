@@ -72,15 +72,16 @@ const VideoCards = ({ videosData, changeData }) => {
                 {videoDetials.title}
               </p>
               <iframe
-                width="560"
-                height="315"
+                // width="560"
+                 height="315"
                 src={`https://www.youtube.com/embed/${videoDetials.url.slice(
                   32,
                   videoDetials.url.length
                 )}`}
                 title={videoDetials.title}
                 key={index + 3000}
-                allowfullscreen
+                frameBorder="0"
+                allowFullScreen
               ></iframe>
               <div className="card-body" key={index + 4000}>
                 <div className="d-flex justify-content-between">
