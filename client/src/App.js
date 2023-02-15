@@ -1,19 +1,46 @@
-import React from "react";
+import { React, useState, useEffect, useCallback } from "react";
 import "./App.css";
-import Video from "./Video";
-import dataVideos from "./exampleresponse.json";
+//  import data from "./exampleresponse.json";
+import Header from "./Components/Header";
+import ToggleAscDesc from "./Components/ToggleAscDesc";
+import VideoCards from "./Components/VideoCards";
+import AddVideo from "./Components/AddVideo";
+import Footer from "./Components/Footer";
 
 function App() {
+  const [data, setData] = useState([]);
+
+  const fetchMyAPI = useCallback(async () => {
+    let response = await fetch(
+      "https://kawa-full-stack-cyf.onrender.com/videos/"
+    );
+    response = await response.json();
+    setData(orderDataAccordingToVoteRate(response));
+  }, []);
+
+  useEffect(() => {
+    fetchMyAPI();
+  }, [fetchMyAPI]);
+
+  //Make data flexible and can be changed
+  const orderDataAccordingToVoteRate = (data) => {
+    data.sort((a, b) => b.rating - a.rating);
+    data = [...data];
+    return data;
+  };
+
+  const changeData = (data) => {
+    // orderDataAccordingToVoteRate(data); //Live sorting after each change on data, resort again according to the rate
+    setData(data);
+    // console.log(data)
+  };
   return (
     <div className="App">
-      <header className="App-header">
-        <h1>Video Recommendation</h1>
-      </header>
-      <body>
-        {dataVideos.map((video, key) => (
-          <Video video={video} key={key}/>
-        ))}
-      </body>
+      <Header />
+      <AddVideo videosData={data} changeData={changeData} />
+      <ToggleAscDesc changeData={changeData} />
+      <VideoCards videosData={data} changeData={changeData} />
+      <Footer />
     </div>
   );
 }
